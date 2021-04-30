@@ -1,0 +1,16 @@
+{
+    "data": [
+        {"from": "Land Cleaning", "to":"Trient Managen Ribed Burbeded Gr Access Control", "weight": 10},
+        {"from":"Land Cleaning", "to":"Herbaceous Weed Treatment", "weight":3},
+        {"from":"Trient Managen Ribed Burbeded Gr Access Control", "to":"Land Cleaning", "weight":7},
+        {"from":"Brush Management", "to":"Land Cleaning", "weight":7},
+        {"from":"Brush Management", "to":"Herbaceous Weed Treatment", "weight":7},
+        {"from":"Conservation Crop Rotation", "to":"Herbaceous Weed Treatment", "weight":13},
+        {"from":"Coper Crop", "to":"Land Cleaning", "weight":13},
+        {"from":"Fence Forage and Biomass Planting", "to":"Land Cleaning", "weight":6},
+        {"from":"Fence Forage and Biomass Planting", "to":"Trient Managen Ribed Burbeded Gr Access Control", "weight":17},
+        {"from":"Harvent Management", "to":"Land Cleaning", "weight":7},
+        {"from":"Herbaceous Weed Treatment", "to":"Land Cleaning", "weight":20}
+    ]
+
+}
