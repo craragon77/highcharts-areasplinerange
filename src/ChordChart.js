@@ -171,31 +171,32 @@ export default function ViolinGraphTemplate(){
         xAxis: {
             reversed: false,
             labels: {format: "{value}"},
-            sstartOnTick: false,
-            endOnTick: false,
-            gridLineWidth: 0
         },
         yAxis: {
             // min: 0,
-            max: theData.results.length - 1,
+            categories: ["Mango", "Banana"],
+            startOnTick: false,
+            endOnTick: false,
+            gridLineWidth: 0,
+            max: theData.results.length -1
         },
         plotOptions: {
-            series: {
-                marker: {
-                  enabled: false
-                },
-                states: {
-                  hover: {
-                    enabled: false
-                  }
-                },
-                events: {
-                  legendItemClick: function(e){
-                    e.preventDefault();
-                  }
-                },
-                pointStart: xi[0]
+          series: {
+            marker: {
+              enabled: false
+            },
+            states: {
+              hover: {
+                enabled: false
               }
+            },
+            events: {
+              legendItemClick: function (e) {
+                e.preventDefault();
+              }
+            },
+            pointStart: xi[0]
+          }
         },
         tooltip: {
           useHTML: true,
@@ -226,7 +227,7 @@ export default function ViolinGraphTemplate(){
             }, 
             {
                 name: 'Banana',
-                color: 'gold',
+                color: 'green',
                 data: formattedBanana
             }
         ]
