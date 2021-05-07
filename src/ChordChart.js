@@ -4,7 +4,7 @@ import HighchartsReact from 'highcharts-react-official';
 import streamgraph from 'highcharts/modules/streamgraph';
 import * as AllTheCharts from 'highcharts/highcharts-more';
 import HC_more from 'highcharts/highcharts-more';
-import {jStat} from 'jStat';
+import { jStat } from 'jstat';
 HC_more(HighCharts);
 
 streamgraph(HighCharts);
@@ -82,6 +82,7 @@ export default function ViolinGraphTemplate(){
           );
           index++;
         });
+        console.log(stat)
         return { xiData, results, stat };
     }
       
