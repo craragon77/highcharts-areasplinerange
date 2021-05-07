@@ -4,6 +4,7 @@ import HighchartsReact from 'highcharts-react-official';
 import streamgraph from 'highcharts/modules/streamgraph';
 import * as AllTheCharts from 'highcharts/highcharts-more';
 import HC_more from 'highcharts/highcharts-more';
+import {jStat} from 'jStat';
 HC_more(HighCharts);
 
 streamgraph(HighCharts);
