@@ -13,78 +13,76 @@ export default function ViolinGraphTemplate(){
     //we want to work with option 2
     //function curticy of mekhatria; github repo found here: https://github.com/mekhatria/violin-plot/blob/master/violin-plot.js
     function processViolin(step, precision, densityWidth, ...args) {
-        let xiData = [];
-        //process the xi
-        function prcessXi(args) {
-          let tempXdata = [];
-          let tileSteps = 6; //Nbr of point at the top and end of the violin
-          let min = Infinity,
-            max = -Infinity;
-      
-          //process the range of the data set
-          args.forEach((e) => {
-            min = Math.min(min, Math.min(...e));
-            max = Math.max(max, Math.max(...e));
-          });
-      
-          for (let i = min - tileSteps * step; i < max + tileSteps * step; i++) {
-            tempXdata.push(i);
-          }
-          return tempXdata;
-        }
-        xiData = prcessXi(args);
-      
-        //the KDE gaussian function
-        function kdeProcess(xi, u) {
-          return (1 / Math.sqrt(2 * Math.PI)) * Math.exp(Math.pow(xi - u, 2) / -2);
-        }
-        let gap = -1;
-        //Create the upper and lower line of the violin
-        function violinProcess(dataSource) {
-          let data = [];
-          let N = dataSource.length;
-      
-          gap++;
-          for (let i = 0; i < xiData.length; i++) {
-            let temp = 0;
-            for (let j = 0; j < dataSource.length; j++) {
-              temp = temp + kdeProcess(xiData[i], dataSource[j]);
-            }
-            data.push([xiData[i], (1 / N) * temp]);
-          }
-      
-          return data.map((violinPoint, i) => {
-            if (violinPoint[1] > precision) {
-              return [xiData[i], -(violinPoint[1]*densityWidth) + gap, (violinPoint[1]*densityWidth) + gap];
-            } else {
-              return [xiData[i], null, null];
-            }
-          });
-        }
-      
-        let results = [];
-        let stat = [];
-        let index = 0;
-      
+      let xiData = [];
+      //process the xi
+      function prcessXi(args) {
+        let tempXdata = [];
+        let tileSteps = 6; //Nbr of point at the top and end of the violin
+        let min = Infinity,
+          max = -Infinity;
+    
+        //process the range of the data set
         args.forEach((e) => {
-          results.push([]);
-          stat.push([]);
-          results[index] = violinProcess(e).slice();
-          /*THIS PART IS THE PROBLEM; JSTAT IS UUNDEFINED*/
-          //Min, Q1, Median, Q3, Max
-          console.log(jStat)
-          stat[index].push(
-            Math.min(...e),
-            jStat.quartiles(e)[0],
-            jStat.quartiles(e)[1],
-            jStat.quartiles(e)[2],
-            Math.max(...e)
-          );
-          index++;
+          min = Math.min(min, Math.min(...e));
+          max = Math.max(max, Math.max(...e));
         });
-        console.log(stat)
-        return { xiData, results, stat };
+    
+        for (let i = min - tileSteps * step; i < max + tileSteps * step; i++) {
+          tempXdata.push(i);
+        }
+        return tempXdata;
+      }
+      xiData = prcessXi(args);
+    
+      //the KDE gaussian function
+      function kdeProcess(xi, u) {
+        return (1 / Math.sqrt(2 * Math.PI)) * Math.exp(Math.pow(xi - u, 2) / -2);
+      }
+      let gap = -1;
+      //Create the upper and lower line of the violin
+      function violinProcess(dataSource) {
+        let data = [];
+        let N = dataSource.length;
+    
+        gap++;
+        for (let i = 0; i < xiData.length; i++) {
+          let temp = 0;
+          for (let j = 0; j < dataSource.length; j++) {
+            temp = temp + kdeProcess(xiData[i], dataSource[j]);
+          }
+          data.push([xiData[i], (1 / N) * temp]);
+        }
+    
+        return data.map((violinPoint, i) => {
+          if (violinPoint[1] > precision) {
+            return [xiData[i], -(violinPoint[1]*densityWidth) + gap, (violinPoint[1]*densityWidth) + gap];
+          } else {
+            return [xiData[i], null, null];
+          }
+        });
+      }
+    
+      let results = [];
+      let stat = [];
+      let index = 0;
+    
+      args.forEach((e) => {
+        results.push([]);
+        stat.push([]);
+        results[index] = violinProcess(e).slice();
+        //Min, Q1, Median, Q3, Max
+        stat[index].push(
+          Math.min(...e),
+          jStat.quartiles(e)[0],
+          jStat.quartiles(e)[1],
+          jStat.quartiles(e)[2],
+          Math.max(...e)
+        );
+        index++;
+      });
+      return { xiData, results, stat };
     }
+    
       
 
     const mockDataOne = [
@@ -172,12 +170,14 @@ export default function ViolinGraphTemplate(){
         },
         xAxis: {
             reversed: false,
-            labels: {format: "{value}"}
+            labels: {format: "{value}"},
+            sstartOnTick: false,
+            endOnTick: false,
+            gridLineWidth: 0
         },
         yAxis: {
-            startOnTick: false,
-            endOnTick: false,
-            gridLineWidth: 0,
+            // min: 0,
+            max: theData.results.length - 1,
         },
         plotOptions: {
             series: {
@@ -189,8 +189,34 @@ export default function ViolinGraphTemplate(){
                     enabled: false
                   }
                 },
+                events: {
+                  legendItemClick: function(e){
+                    e.preventDefault();
+                  }
+                },
                 pointStart: xi[0]
               }
+        },
+        tooltip: {
+          useHTML: true,
+          valueDecimals: 3,
+          formatter: function () {
+            return (
+              "<b>" +
+              this.series.name +
+              "</b><table><tr><td>Max:</td><td>" +
+              stat[this.series.index][4] +
+              " kg</td></tr><tr><td>Q 3:</td><td>" +
+              stat[this.series.index][3] +
+              " kg </td></tr><tr><td>Median:</td><td>" +
+              stat[this.series.index][2] +
+              " kg</td></tr><tr><td>Q 1:</td><td>" +
+              stat[this.series.index][1] +
+              " kg</td></tr><tr><td>Min:</td><td>" +
+              stat[this.series.index][0] +
+              " kg</td></tr></table>"
+            );
+          }
         },
         series: [
             {
