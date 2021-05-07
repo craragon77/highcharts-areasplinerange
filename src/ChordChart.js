@@ -164,7 +164,7 @@ export default function ViolinGraphTemplate(){
     const [optionTwo, handleOptionTwo] = useState({
         title: {text: 'Test Violin Chart 2'},
         chart: {
-            type: AllTheCharts.areasplinerange,
+            type: 'areasplinerange',
             inverted: true,
             animation: true
         },
