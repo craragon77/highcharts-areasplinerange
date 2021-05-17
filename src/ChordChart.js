@@ -136,24 +136,28 @@ export default function ViolinGraphTemplate(){
         },
     ]
 
+    const mockData2 = [{"resource_component":"Compaction","pct_avgannchange":-100}, {"resource_component":"Compaction","pct_avgannchange":-99.62962962962963}, {"resource_component":"Compaction","pct_avgannchange":-99.27140255009107}, {"resource_component":"Compaction","pct_avgannchange":-99.09297052154194}, {"resource_component":"Compaction","pct_avgannchange":-99.06542056074767}, {"resource_component":"Compaction","pct_avgannchange":-98.19427148194272}, {"resource_component":"Compaction","pct_avgannchange":-97.75641025641025}, {"resource_component":"Compaction","pct_avgannchange":-97.72486772486772}, {"resource_component":"Compaction","pct_avgannchange":-97.62820512820512}, {"resource_component":"Compaction","pct_avgannchange":-97.26156751652503}, {"resource_component":"Compaction","pct_avgannchange":-96.88667496886674}, {"resource_component":"Compaction","pct_avgannchange":-96.59400544959128}, {"resource_component":"Compaction","pct_avgannchange":-96.44670050761421}, {"resource_component":"Compaction","pct_avgannchange":-96.01820250284415}, {"resource_component":"Compaction","pct_avgannchange":-95.79067121729238}, {"resource_component":"Compaction","pct_avgannchange":-95.55822328931572}, {"resource_component":"Compaction","pct_avgannchange":-95.27856468366383}, {"resource_component":"Compaction","pct_avgannchange":-94.25901201602136}, {"resource_component":"Compaction","pct_avgannchange":-94.16180150125103}, {"resource_component":"Compaction","pct_avgannchange":-94.07484407484408}, {"resource_component":"Compaction","pct_avgannchange":-93.97163120567376}, {"resource_component":"Compaction","pct_avgannchange":-93.44262295081967}, {"resource_component":"Compaction","pct_avgannchange":-93.34532374100719}, {"resource_component":"Compaction","pct_avgannchange":-93.32061068702289}, {"resource_component":"Compaction","pct_avgannchange":-93.13253012048193}, {"resource_component":"Compaction","pct_avgannchange":-90.22869022869024}, {"resource_component":"Compaction","pct_avgannchange":-90.05449591280654}, {"resource_component":"Compaction","pct_avgannchange":-88.67469879518072}]
+
     let mango = [];
     let banana = [];
-
+    let compaction = [];
     function filterData(theData){
         theData.forEach((elem) => {
             if(elem.fruit == "mango"){
                 mango.push(elem.number)
             } else if (elem.fruit == "banana"){
                 banana.push(elem.number)
+            } else if (elem.resource_component == "Compaction"){
+              compaction.push(elem.resource_component)
             }
         })
-        return mango
+        return mango, banana
     }
     filterData(mockDataOne);
 
     let step = 1;
     let precision = .0000000000001;
-    let width = 3;
+    let width = 1;
     let theData = processViolin(step, precision, width, mango, banana);
 
     let xi = theData.xiData;
@@ -174,7 +178,7 @@ export default function ViolinGraphTemplate(){
         },
         yAxis: {
             // min: 0,
-            categories: ["Mango", "Banana"],
+            categories: ["Compaction"],
             startOnTick: false,
             endOnTick: false,
             gridLineWidth: 0,
@@ -221,12 +225,12 @@ export default function ViolinGraphTemplate(){
         },
         series: [
             {
-                name: 'Mango',
+                name: 'item1',
                 color: 'orange',
                 data: formattedMango,
             }, 
             {
-                name: 'Banana',
+                name: 'item2',
                 color: 'green',
                 data: formattedBanana
             }
